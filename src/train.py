@@ -248,7 +248,7 @@ def train(
     species_class_nums = df.species.value_counts().sort_index().values
     model = SphereClassifier(cfg, id_class_nums=id_class_nums, species_class_nums=species_class_nums)
     data_module = WhaleDataModule(
-        df, cfg, f"{args.in_base_dir}/train_images", cfg.val_bbox, fold, additional_dataset=additional_dataset
+        df, cfg, f"{args.in_base_dir}/happy-whale-and-dolphin/train_images", cfg.val_bbox, fold, additional_dataset=additional_dataset
     )
     loggers = [pl_loggers.CSVLogger(out_dir)]
     if args.wandb_logger:
@@ -282,8 +282,8 @@ def train(
             trainer.test(model, data_module.all_dataloader())
             # test data
             model.test_results_fp = f"{out_dir}/test_{test_bbox}_results.npz"
-            df_test = load_df(args.in_base_dir, cfg, "sample_submission.csv", False)
-            test_data_module = WhaleDataModule(df_test, cfg, f"{args.in_base_dir}/test_images", test_bbox, -1)
+            df_test = load_df(args.in_base_dir, cfg, "happy-whale-and-dolphin/sample_submission.csv", False)
+            test_data_module = WhaleDataModule(df_test, cfg, f"{args.in_base_dir}/happy-whale-and-dolphin/test_images", test_bbox, -1)
             trainer.test(model, test_data_module.all_dataloader())
 
     if args.wandb_logger:
@@ -299,12 +299,12 @@ def main():
     warnings.filterwarnings("ignore", ".*does not have many workers.*")
     cfg = load_config(args.config_path, "config/default.yaml")
     print(cfg)
-    df = load_df(args.in_base_dir, cfg, "train.csv", True)
+    df = load_df(args.in_base_dir, cfg, "happy-whale-and-dolphin/train.csv", True)
     pseudo_dataset = None
     if cfg.pseudo_label is not None:
         pseudo_df = load_df(args.in_base_dir, cfg, cfg.pseudo_label, False)
         pseudo_dataset = WhaleDataset(
-            pseudo_df[pseudo_df.conf > cfg.pseudo_conf_threshold], cfg, f"{args.in_base_dir}/test_images", "", True
+            pseudo_df[pseudo_df.conf > cfg.pseudo_conf_threshold], cfg, f"{args.in_base_dir}/happy-whale-and-dolphin/test_images", "", True
         )
     if cfg["n_splits"] == -1:
         train(df, args, cfg, -1, do_inference=True, additional_dataset=pseudo_dataset)

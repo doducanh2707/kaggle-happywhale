@@ -94,22 +94,22 @@ class WhaleDataset(Dataset):
 def load_bbox(cfg: Config, in_base_dir: str, bbox_name: str, is_train: bool) -> pd.Series:
     if bbox_name == "detic":
         filename = "train2.csv" if is_train else "test2.csv"
-        tmp_df = pd.read_csv(f"{in_base_dir}/{filename}")
+        tmp_df = pd.read_csv(f"{in_base_dir}/whale2-cropped-dataset/{filename}")
         low_conf = pd.Series([False for _ in range(len(tmp_df))])
         bbox = tmp_df.box.map(lambda s: list(map(int, s.split())) if s == s else None)
     elif bbox_name == "fullbody":
         filename = "fullbody_train.csv" if is_train else "fullbody_test.csv"
-        tmp_df = pd.read_csv(f"{in_base_dir}/{filename}")
+        tmp_df = pd.read_csv(f"{in_base_dir}/fullbodywhaleannotations/{filename}")
         low_conf = tmp_df.conf.map(lambda s: float(s[1:-1]) if s == s else -1) < cfg.bbox_conf_threshold
         bbox = tmp_df.bbox.map(lambda s: list(map(int, s[2:-2].split())))
     elif bbox_name == "fullbody_charm":
         filename = "fullbody_train_charm.csv" if is_train else "fullbody_test_charm.csv"
-        tmp_df = pd.read_csv(f"{in_base_dir}/{filename}")
+        tmp_df = pd.read_csv(f"{in_base_dir}/1st-place-solution/{filename}")
         low_conf = tmp_df.conf.map(lambda s: float(s[1:-1]) if s == s else -1) < cfg.bbox_conf_threshold
         bbox = tmp_df.bbox.map(lambda s: list(map(int, s[2:-2].split())) if s == s else None)
     elif bbox_name == "backfin":
-        filename = "train_backfin.csv" if is_train else "test_backfin.csv"
-        tmp_df = pd.read_csv(f"{in_base_dir}/{filename}")
+        filename = "train.csv" if is_train else "test.csv"
+        tmp_df = pd.read_csv(f"{in_base_dir}/backfin-detection-with-yolov5/{filename}")
         low_conf = tmp_df.conf.map(lambda s: float(s[1:-1]) if s == s else -1) < cfg.bbox_conf_threshold
         bbox = tmp_df.bbox.map(lambda s: list(map(int, s[2:-2].split())) if s == s else None)
     else:
@@ -129,7 +129,7 @@ def load_df(in_base_dir: str, cfg: Config, filename: str, is_train: bool) -> pd.
     # label encoder
     if hasattr(df, "individual_id"):
         label_encoder = preprocessing.LabelEncoder()
-        label_encoder.classes_ = np.load(f"{in_base_dir}/individual_id.npy", allow_pickle=True)
+        label_encoder.classes_ = np.load(f"{in_base_dir}/1st-place-solution/individual_id.npy", allow_pickle=True)
         df.individual_id = label_encoder.transform(df.individual_id)
         assert cfg.num_classes == len(label_encoder.classes_)
     if hasattr(df, "species"):
@@ -143,7 +143,7 @@ def load_df(in_base_dir: str, cfg: Config, filename: str, is_train: bool) -> pd.
             inplace=True,
         )  # https://www.kaggle.com/c/happy-whale-and-dolphin/discussion/305574
         label_encoder_species = preprocessing.LabelEncoder()
-        label_encoder_species.classes_ = np.load(f"{in_base_dir}/species.npy", allow_pickle=True)
+        label_encoder_species.classes_ = np.load(f"{in_base_dir}/1st-place-solution/species.npy", allow_pickle=True)
         df.species = label_encoder_species.transform(df.species)
         assert cfg.num_species_classes == len(label_encoder_species.classes_)
     return df
