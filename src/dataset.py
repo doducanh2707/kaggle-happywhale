@@ -120,8 +120,7 @@ def load_bbox(cfg: Config, in_base_dir: str, bbox_name: str, is_train: bool) -> 
 
 
 def load_df(in_base_dir: str, cfg: Config, filename: str, is_train: bool) -> pd.DataFrame:
-    # df = pd.read_csv(f"{in_base_dir}/{filename}")
-    df = pd.read_csv(f'input/{filename}')  
+    df = pd.read_csv(f"{in_base_dir}/{filename}") 
     # bbox
     for bbox_name in ["detic", "fullbody", "fullbody_charm", "backfin"]:
         df[bbox_name] = load_bbox(cfg, in_base_dir, bbox_name, is_train)
