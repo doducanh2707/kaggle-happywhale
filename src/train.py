@@ -267,7 +267,7 @@ def train(
         max_epochs=cfg["max_epochs"],
         logger=loggers,
         callbacks=callbacks,
-        checkpoint_callback=args.save_checkpoint,
+        # checkpoint_callback=args.save_checkpoint,
         precision=16,
         sync_batchnorm=True,
     )
