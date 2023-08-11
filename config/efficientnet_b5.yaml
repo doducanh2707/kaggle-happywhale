@@ -8,5 +8,4 @@ out_indices:
 - 3
 - 4
 n_splits: -1
-pseudo_label: None
 pseudo_conf_threshold: 0.6
