@@ -306,10 +306,11 @@ def main():
         pseudo_dataset = WhaleDataset(
             pseudo_df[pseudo_df.conf > cfg.pseudo_conf_threshold], cfg, f"{args.in_base_dir}/happy-whale-and-dolphin/test_images", "", True
         )
+    print(len(df))
     if cfg["n_splits"] == -1:
-        train(df, args, cfg, -1, do_inference=True, additional_dataset=pseudo_dataset)
+        train(df, args, cfg, -1, do_inference=True, additional_dataset=None)
     else:
-        train(df, args, cfg, 0, do_inference=True, additional_dataset=pseudo_dataset)
+        train(df, args, cfg, 0, do_inference=True, additional_dataset=None)
 
 
 if __name__ == "__main__":
