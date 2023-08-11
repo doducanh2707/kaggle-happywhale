@@ -71,6 +71,7 @@ class WhaleDataModule(LightningDataModule):
         dataset = self.get_dataset(self.train_df, True)
         if self.additional_dataset is not None:
             dataset = ConcatDataset([dataset, self.additional_dataset])
+        print(len(dataset))
         return DataLoader(
             dataset,
             batch_size=self.cfg.batch_size,
@@ -306,7 +307,6 @@ def main():
         pseudo_dataset = WhaleDataset(
             pseudo_df[pseudo_df.conf > cfg.pseudo_conf_threshold], cfg, f"{args.in_base_dir}/happy-whale-and-dolphin/test_images", "", True
         )
-    print(len(df))
     if cfg["n_splits"] == -1:
         train(df, args, cfg, -1, do_inference=True, additional_dataset=None)
     else:
