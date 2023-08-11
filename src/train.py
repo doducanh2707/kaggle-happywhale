@@ -71,7 +71,6 @@ class WhaleDataModule(LightningDataModule):
         dataset = self.get_dataset(self.train_df, True)
         if self.additional_dataset is not None:
             dataset = ConcatDataset([dataset, self.additional_dataset])
-        print(len(dataset))
         return DataLoader(
             dataset,
             batch_size=self.cfg.batch_size,

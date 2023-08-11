@@ -7,5 +7,5 @@ model_name: tf_efficientnet_b5_ns
 out_indices:
 - 3
 - 4
-n_splits: -1
+n_splits: 5
 pseudo_conf_threshold: 0.6
